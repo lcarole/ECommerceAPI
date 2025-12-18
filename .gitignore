@@ -486,3 +486,6 @@ $RECYCLE.BIN/
 # Paramètres d'application locales
 appsettings*.json
 !appsettings.json
+
+# Docker
+docker/
