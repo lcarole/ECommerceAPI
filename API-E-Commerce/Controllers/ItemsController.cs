@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API_E_Commerce.Controllers;
 
-[Route("[controller]")]
+[Route("items")]
 [ApiController]
 [Authorize]
 public class ItemsController : ControllerBase
@@ -35,7 +35,7 @@ public class ItemsController : ControllerBase
         ItemDto? item = await _itemService.GetItemById(idItem);
         if (item == null)
         {
-            return NotFound();
+            return NotFound("Item not found.");
         }
         return Ok(item);
     }
@@ -58,7 +58,7 @@ public class ItemsController : ControllerBase
         return Ok(items);
     }
 
-    [HttpGet("search/{query}")]
+    [HttpGet("search")]
     [EndpointSummary("Search items by name")]
     [EndpointDescription("Searches for items by their name and retrieves a list of matching items.")]
     public async Task<ActionResult<List<ItemDto>>> GetItemsByName(string query)

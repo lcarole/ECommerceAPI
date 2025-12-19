@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API_E_Commerce.Controllers;
 
-[Route("[controller]")]
+[Route("categories")]
 [ApiController]
 [Authorize]
 public class CategoriesController : ControllerBase
@@ -30,18 +30,20 @@ public class CategoriesController : ControllerBase
     [HttpGet("{idCategory}")]
     [EndpointSummary("Get category by ID")]
     [EndpointDescription("Retrieves a specific category by its unique identifier.")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404, Type = typeof(string))]
     public async Task<ActionResult<CategoryDto>> GetCategoryById(int idCategory)
     {
         CategoryDto? category = await _categoryService.GetCategoryById(idCategory);
         
         if (category == null)
         {
-            return NotFound();
+            return NotFound("Category not found.");
         }
         return Ok(category);
     }
 
-    [HttpGet("search/{query}")]
+    [HttpGet("search")]
     [EndpointSummary("Get categories by name")]
     [EndpointDescription("Retrieves a list of categories that match the specified name.")]
     public async Task<ActionResult<List<CategoryDto>>> GetCategoriesByName(string query)
@@ -53,7 +55,8 @@ public class CategoriesController : ControllerBase
     [HttpPost]
     [EndpointSummary("Create a new category")]
     [EndpointDescription("Creates a new category in the e-commerce platform.")]
-    public async Task<ActionResult<CategoryDto>> CreateCategory([FromBody] CreateCategoryDto categoryDto)
+    [ProducesResponseType(201)]
+    public async Task<ActionResult<CategoryDto>> CreateCategory(CreateCategoryDto categoryDto)
     {
         CategoryDto createdCategory = await _categoryService.CreateCategory(categoryDto);
         return CreatedAtAction(nameof(GetCategoryById), new { idCategory = createdCategory.Id }, createdCategory);

@@ -51,7 +51,7 @@ app.MapOpenApi();
 
 app.MapScalarApiReference(options => options
     .WithTitle("E-Commerce API")
-    .WithDefaultHttpClient(ScalarTarget.JavaScript, ScalarClient.Fetch)
+    .AddPreferredSecuritySchemes("Bearer")
 );
 
 app.UseHttpsRedirection();
