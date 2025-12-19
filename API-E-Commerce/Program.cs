@@ -1,4 +1,5 @@
 using API_E_Commerce.Contexts;
+using API_E_Commerce.Transformers.DocumentTransformers;
 using API_E_Commerce.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options => 
+{
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+    options.AddDocumentTransformer<DocumentInfoTransformer>();
+});
 
 // Add db services
 builder.Services.AddDbContext<ECommerceContext>(options =>
