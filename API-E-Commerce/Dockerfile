@@ -1,5 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
+
 ARG BUILD_CONFIGURATION=Release
 COPY ["API-E-Commerce/API-E-Commerce.csproj", "API-E-Commerce/"]
 RUN dotnet restore "API-E-Commerce/API-E-Commerce.csproj"

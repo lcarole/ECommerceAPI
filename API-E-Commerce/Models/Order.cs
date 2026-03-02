@@ -1,4 +1,4 @@
-﻿namespace API_E_Commerce.Entities;
+﻿namespace API_E_Commerce.Models;
 
 public partial class Order
 {

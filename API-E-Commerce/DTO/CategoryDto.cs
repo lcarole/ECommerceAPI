@@ -1,4 +1,4 @@
-using API_E_Commerce.Entities;
+using API_E_Commerce.Models;
 
 namespace API_E_Commerce.DTO;
 

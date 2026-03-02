@@ -10,9 +10,11 @@ public class DocumentInfoTransformer : IOpenApiDocumentTransformer
         document.Info = new()
         {
             Title = "E-Commerce API",
-            Version = "v1.0.0",
-            Description = "API pour un exemple d'application e-commerce. "
-            + "Authentification via Keycloak avec JWT Bearer tokens.",
+            Version = "1.0.0",
+            Description = """
+            API pour un exemple d'application e-commerce.
+            Authentification via OAuth2
+            """,
         };
         return Task.CompletedTask;
     }

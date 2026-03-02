@@ -1,4 +1,4 @@
-﻿using API_E_Commerce.Entities;
+﻿using API_E_Commerce.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API_E_Commerce.Contexts;

@@ -4,12 +4,12 @@ using API_E_Commerce.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddOpenApi(options => 
 {
@@ -20,7 +20,7 @@ builder.Services.AddOpenApi(options =>
 // Add db services
 builder.Services.AddDbContext<ECommerceContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresDatabase"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection"));
 });
 
 // Add services by extension methods
@@ -30,8 +30,8 @@ builder.Services.AddApplicationServices();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = builder.Configuration["Keycloak:Authority"];
-        options.Audience = builder.Configuration["Keycloak:Audience"];
+        options.Authority = builder.Configuration["JwtAuthentication:Authority"];
+        options.Audience = builder.Configuration["JwtAuthentication:Audience"];
         if (builder.Environment.IsDevelopment())
         {
             options.RequireHttpsMetadata = false;
@@ -40,19 +40,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorizationBuilder();
 
-builder.Services.AddMemoryCache();
-
-builder.Services.AddRoutePrefixConvention("api");
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.MapOpenApi();
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
 
-app.MapScalarApiReference(options => options
-    .WithTitle("E-Commerce API")
-    .AddPreferredSecuritySchemes("Bearer")
-);
+    app.MapScalarApiReference(options => options
+        .WithTitle("E-Commerce API")
+        .AddPreferredSecuritySchemes("Bearer")
+    );
+}
 
 app.UseHttpsRedirection();
 
@@ -60,6 +59,6 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapApiEndpoints();
 
 app.Run();

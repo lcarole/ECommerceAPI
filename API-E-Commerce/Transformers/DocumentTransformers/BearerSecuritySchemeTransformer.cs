@@ -15,7 +15,7 @@ internal sealed class BearerSecuritySchemeTransformer(IAuthenticationSchemeProvi
                 ["Bearer"] = new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.Http,
-                    Scheme = "bearer", // "bearer" refers to the header name here
+                    Scheme = "Bearer", // "Bearer" refers to the header name here
                     In = ParameterLocation.Header,
                     BearerFormat = "Json Web Token"
                 }
