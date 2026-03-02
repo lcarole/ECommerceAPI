@@ -32,6 +32,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.Authority = builder.Configuration["JwtAuthentication:Authority"];
         options.Audience = builder.Configuration["JwtAuthentication:Audience"];
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"❌ Auth failed: {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("✅ Token validated");
+                return Task.CompletedTask;
+            }
+        };
+        
         if (builder.Environment.IsDevelopment())
         {
             options.RequireHttpsMetadata = false;
