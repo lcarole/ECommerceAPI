@@ -55,8 +55,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseForwardedHeaders();
 
-app.UseHttpsRedirection();
-
 app.UseAuthentication();
 
 app.UseAuthorization();
