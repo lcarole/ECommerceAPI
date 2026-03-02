@@ -36,6 +36,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             OnAuthenticationFailed = context =>
             {
+                Console.WriteLine("Issuer: " + context.Options.Authority);
+                Console.WriteLine("Audience: " + context.Options.Audience);
                 Console.WriteLine($"❌ Auth failed: {context.Exception.Message}");
                 return Task.CompletedTask;
             },
