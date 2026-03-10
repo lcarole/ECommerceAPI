@@ -4,7 +4,6 @@ using API_E_Commerce.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
-using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,7 +64,7 @@ if (app.Environment.IsDevelopment())
 
     app.MapScalarApiReference(options => options
         .WithTitle("E-Commerce API")
-        .AddPreferredSecuritySchemes("Bearer")
+        .AddPreferredSecuritySchemes("OIDC")
     );
 }
 
