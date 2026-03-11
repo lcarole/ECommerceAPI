@@ -1,5 +1,5 @@
-using System.Configuration;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
@@ -9,18 +9,39 @@ internal sealed class BearerSecuritySchemeTransformer(IAuthenticationSchemeProvi
     public async Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
     {
         var authenticationSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();
-        if (authenticationSchemes.Any(authScheme => authScheme.Name == "Bearer"))
+        if (authenticationSchemes.Any(authScheme => authScheme.Name == JwtBearerDefaults.AuthenticationScheme))
         {
+
             var securitySchemes = new Dictionary<string, IOpenApiSecurityScheme>
             {
-                ["OIDC"] = new OpenApiSecurityScheme
+                ["OAuth2"] = new OpenApiSecurityScheme
                 {
-                    Type = SecuritySchemeType.OpenIdConnect,
-                    OpenIdConnectUrl = new Uri($"{configuration["JwtAuthentication:Authority"]}/.well-known/openid-configuration")
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri(configuration["OAuth2Endpoints:AuthorizationUrl"]),
+                            TokenUrl = new Uri(configuration["OAuth2Endpoints:TokenUrl"])
+                        },
+                    }
                 }
             };
+
             document.Components ??= new OpenApiComponents();
             document.Components.SecuritySchemes = securitySchemes;
+            document.Security = new List<OpenApiSecurityRequirement>
+            {
+                new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecuritySchemeReference("OAuth2"),
+                        []
+                    }
+                }
+            };
+
+            document.SetReferenceHostDocument();
         }
     }
 }

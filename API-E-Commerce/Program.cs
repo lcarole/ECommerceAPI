@@ -64,7 +64,12 @@ if (app.Environment.IsDevelopment())
 
     app.MapScalarApiReference(options => options
         .WithTitle("E-Commerce API")
-        .AddPreferredSecuritySchemes("OIDC")
+        .AddPreferredSecuritySchemes("OAuth2")
+        .AddAuthorizationCodeFlow("OAuth2", options =>
+        {
+            options.Pkce = Pkce.Sha256;
+            options.CredentialsLocation = CredentialsLocation.Body;
+        })
     );
 }
 
