@@ -21,8 +21,11 @@ internal sealed class BearerSecuritySchemeTransformer(IAuthenticationSchemeProvi
                     {
                         AuthorizationCode = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri(configuration["OAuth2Endpoints:AuthorizationUrl"]),
-                            TokenUrl = new Uri(configuration["OAuth2Endpoints:TokenUrl"])
+                            AuthorizationUrl = new Uri(configuration["OAuth2Endpoints:AuthorizationUrl"] 
+                            ?? throw new InvalidOperationException("OAuth2Endpoints:AuthorizationUrl is not configured")),
+
+                            TokenUrl = new Uri(configuration["OAuth2Endpoints:TokenUrl"] 
+                            ?? throw new InvalidOperationException("OAuth2Endpoints:TokenUrl is not configured"))
                         },
                     }
                 }
